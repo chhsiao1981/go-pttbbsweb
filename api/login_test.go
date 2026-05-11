@@ -22,7 +22,7 @@ func TestLogin(t *testing.T) {
 		ClientID:     "default_client_id",
 		ClientSecret: "test_client_secret",
 		Username:     "testuserid1",
-		Password:     "testpasswd",
+		VerifyCode:   "testpasswd",
 	}
 
 	expected0 := &LoginResult{TokenType: "bearer", UserID: "testuserid1", TokenUser: "testuserid1"}
@@ -93,7 +93,7 @@ func TestLoginWrapper(t *testing.T) {
 		ClientID:     "default_client_id",
 		ClientSecret: "test_client_secret",
 		Username:     "SYSOP",
-		Password:     "123123",
+		VerifyCode:   "123123",
 	}
 	type args struct {
 		params *LoginParams

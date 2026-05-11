@@ -106,7 +106,7 @@ func TestCreateUserEmail(t *testing.T) {
 		wg.Add(1)
 		t.Run(tt.name, func(t *testing.T) {
 			defer wg.Done()
-			err := CreateUserEmail(tt.args.userID, tt.args.email, tt.args.updateNanoTS)
+			err := CreateUserEmail(tt.args.userID, tt.args.email, false, tt.args.updateNanoTS)
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateUserEmail() error = %v, wantErr %v", err, tt.wantErr)
@@ -114,10 +114,10 @@ func TestCreateUserEmail(t *testing.T) {
 
 			assert.Equal(t, err, tt.expectedErr)
 
-			got, _ := GetUserEmailByEmail(tt.args.email, tt.args.updateNanoTS)
+			got, _ := GetUserEmailByEmail(tt.args.email)
 			testutil.TDeepEqual(t, "got", got, tt.expected)
 
-			got, _ = GetUserEmailByUserID(tt.args.userID, tt.args.updateNanoTS)
+			got, _ = GetUserEmailByUserID(tt.args.userID)
 			testutil.TDeepEqual(t, "gotByUserID", got, tt.expectedByUserID)
 		})
 		wg.Wait()
@@ -130,11 +130,11 @@ func TestUpdateUserEmailIsSet(t *testing.T) {
 
 	defer UserEmail_c.Drop()
 
-	_ = CreateUserEmail("SYSOP", "test@ptt.test", 1234567890000000)
+	_ = CreateUserEmail("SYSOP", "test@ptt.test", false, 1234567890000000)
 	type args struct {
 		userID       bbs.UUserID
 		email        string
-		isSet        bool
+		isDefault    bool
 		updateNanoTS types.NanoTS
 	}
 	tests := []struct {
@@ -144,14 +144,14 @@ func TestUpdateUserEmailIsSet(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			args: args{userID: "SYSOP", email: "test@ptt.test", isSet: true, updateNanoTS: 1234567890000000001},
+			args: args{userID: "SYSOP", email: "test@ptt.test", isDefault: true, updateNanoTS: 1234567890000000001},
 		},
 		{
-			args:    args{userID: "SYSOP", email: "test@ptt2.test", isSet: true, updateNanoTS: 1234567890000000002},
+			args:    args{userID: "SYSOP", email: "test@ptt2.test", isDefault: true, updateNanoTS: 1234567890000000002},
 			wantErr: true,
 		},
 		{
-			args:    args{userID: "SYSOP2", email: "test@ptt.test", isSet: true, updateNanoTS: 1234567890000000003},
+			args:    args{userID: "SYSOP2", email: "test@ptt.test", isDefault: true, updateNanoTS: 1234567890000000003},
 			wantErr: true,
 		},
 	}
@@ -160,7 +160,7 @@ func TestUpdateUserEmailIsSet(t *testing.T) {
 		wg.Add(1)
 		t.Run(tt.name, func(t *testing.T) {
 			defer wg.Done()
-			if err := UpdateUserEmailIsSet(tt.args.userID, tt.args.email, tt.args.isSet, tt.args.updateNanoTS); (err != nil) != tt.wantErr {
+			if err := UpdateUserEmailIsDefault(tt.args.userID, tt.args.email, tt.args.isDefault, tt.args.updateNanoTS); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateUserEmailIsSet() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

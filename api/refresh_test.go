@@ -73,8 +73,8 @@ func TestRefresh(t *testing.T) {
 			result, _ := gotResult.(*RefreshResult)
 			result.AccessToken = ""
 			result.RefreshToken = ""
-			result.AccessExpire = 0
-			result.RefreshExpire = 0
+			result.AccessExpireTS = 0
+			result.RefreshExpireTS = 0
 			if !reflect.DeepEqual(gotResult, tt.wantResult) {
 				t.Errorf("Refresh() gotResult = %v, want %v", gotResult, tt.wantResult)
 			}

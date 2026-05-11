@@ -19,16 +19,9 @@ func TestRegisterUser(t *testing.T) {
 	defer schema.AccessToken_c.Drop()
 
 	params0 := &RegisterUserParams{
-		ClientID:        "default_client_id",
-		ClientSecret:    "test_client_secret",
-		Username:        "testuserid1",
-		Password:        "testpasswd",
-		PasswordConfirm: "testpasswd",
-		Email:           "test@ptt.test",
-		TwoFactorToken:  "123123",
+		Token: "123123",
 	}
 
-	expected0 := &RegisterUserResult{TokenType: "bearer", UserID: "testuserid1", TokenUser: "testuserid1"}
 	expectedDB0 := []*schema.AccessToken{{UserID: "testuserid1"}}
 
 	_ = schema.Set2FA("testuserid1", "test@ptt.test", "123123", time.Duration(1)*time.Second)
@@ -87,7 +80,6 @@ func TestRegisterUser(t *testing.T) {
 				expected.AccessToken = ret[0].AccessToken
 			*/
 
-			result := gotResult.(*RegisterUserResult)
 			tt.expectedResult.AccessToken = result.AccessToken
 
 			if !reflect.DeepEqual(result, tt.expectedResult) {
