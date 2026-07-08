@@ -21,11 +21,11 @@ func TestLogin(t *testing.T) {
 	params0 := &LoginParams{
 		ClientID:     "default_client_id",
 		ClientSecret: "test_client_secret",
-		Username:     "testuserid1",
+		Input:        "123456",
 		VerifyCode:   "testpasswd",
 	}
 
-	expected0 := &LoginResult{TokenType: "bearer", UserID: "testuserid1", TokenUser: "testuserid1"}
+	expected0 := &LoginResult{TokenType: "bearer", Username: "testuserid1"}
 	expectedDB0 := []*schema.AccessToken{{UserID: "testuserid1"}}
 
 	type args struct {
@@ -92,7 +92,7 @@ func TestLoginWrapper(t *testing.T) {
 	params0 := &LoginParams{
 		ClientID:     "default_client_id",
 		ClientSecret: "test_client_secret",
-		Username:     "SYSOP",
+		Input:        "123457",
 		VerifyCode:   "123123",
 	}
 	type args struct {
