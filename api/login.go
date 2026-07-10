@@ -14,7 +14,9 @@ type LoginParams struct {
 	ClientID     string `json:"client_id" form:"client_id"`
 	ClientSecret string `json:"client_secret" form:"client_secret"`
 
-	Input      string `json:"input" form:"input"`
+	// Input can be username or email
+	Input string `json:"input" form:"input"`
+
 	VerifyCode string `json:"verify_code" form:"verify_code"`
 }
 

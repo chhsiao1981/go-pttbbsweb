@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 const REGISTER_USER_R = "/account/register"
@@ -27,6 +28,7 @@ func RegisterUser(remoteAddr string, user *UserInfo, params interface{}, c *gin.
 	}
 
 	email, err := getEmailFromEmailVerificationToken(theParams.Token)
+	logrus.Infof("api.RegisterUser: after getEmailFromEmailVerifitcationToken: token: %v email: %v e: %v", theParams.Token, email, err)
 	if err != nil {
 		return types.ERR_URL, 303, err
 	}

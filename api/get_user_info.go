@@ -92,9 +92,8 @@ type GetUserInfoResult struct {
 	Avatar   []byte      `json:"avatar"`
 	AvatarTS types.Time8 `json:"avatar_ts"`
 
-	Email    string      `json:"email"`
-	EmailSet bool        `json:"email_set"`
-	EmailTS  types.Time8 `json:"email_ts"`
+	Email   string      `json:"email"`
+	EmailTS types.Time8 `json:"email_ts"`
 
 	TwoFactorEnabled   bool        `json:"twofactor_enabled"`
 	TwoFactorEnabledTS types.Time8 `json:"twofactor_enabled_ts"`
@@ -139,16 +138,19 @@ func GetUserInfo(remoteAddr string, user *UserInfo, params interface{}, path int
 	queryUserID := userDetail.UserID
 
 	userNewInfo, err := schema.GetUserNewInfo(queryUserID)
+	logrus.Infof("GetUserInfo: after GetUserNewInfo: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}
 
 	userIDEmail, err := schema.GetUserIDEmailByUserID(queryUserID, updateNanoTS)
+	logrus.Infof("GetUserInfo: after GetUserIDEmailByUserID: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}
 
 	userEmail, err := schema.GetUserEmailByUserID(queryUserID)
+	logrus.Infof("GetUserInfo: after GetUserEmailByUserID: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}
@@ -292,9 +294,8 @@ func NewUserInfoResult(userDetail_db *schema.UserDetail, userNewInfo_db *schema.
 		Avatar:   userNewInfo_db.Avatar,
 		AvatarTS: userNewInfo_db.AvatarNanoTS.ToTime8(),
 
-		Email:    userEmail_db.Email,
-		EmailTS:  userEmail_db.UpdateNanoTS.ToTime8(),
-		EmailSet: userEmail_db.IsDefault,
+		Email:   userEmail_db.Email,
+		EmailTS: userEmail_db.UpdateNanoTS.ToTime8(),
 
 		IDEmail:    userIDEmail_db.IDEmail,
 		IDEmailTS:  userIDEmail_db.UpdateNanoTS.ToTime8(),

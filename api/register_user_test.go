@@ -11,6 +11,7 @@ import (
 	"github.com/Ptt-official-app/pttbbs-backend/schema"
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 func TestRegisterUser(t *testing.T) {
@@ -19,15 +20,16 @@ func TestRegisterUser(t *testing.T) {
 
 	defer schema.AccessToken_c.Drop()
 
+	token, err := schema.SetEmailVerification("test@ptt.test", time.Duration(1)*time.Second)
+	logrus.Infof("api.TestRegisterUser: after SetEmailVerification: e: %v", err)
+
 	params0 := &RegisterUserParams{
-		Token: "123123",
+		Token: token,
 	}
 
-	expectedDB0 := []*schema.AccessToken{{UserID: "testuserid1"}}
+	expectedDB0 := []*schema.AccessToken{{UserID: "SYSOP"}}
 
 	expected0 := types.INIT_URL
-
-	_ = schema.Set2FA("testuserid1", "test@ptt.test", "123123", time.Duration(1)*time.Second)
 
 	type args struct {
 		remoteAddr string

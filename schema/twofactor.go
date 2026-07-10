@@ -24,3 +24,7 @@ func Get2FA(userID bbs.UUserID) (token string, err error) {
 
 	return token, nil
 }
+
+func GetAll2FAKeys() (keys []string, err error) {
+	return db.RDBGetAllKeys(rdb, RDB_PREFIX_2FA+"*")
+}
