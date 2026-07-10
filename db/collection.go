@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -450,7 +449,6 @@ func (c *Collection) Find(filter interface{}, limit int64, ret interface{}, proj
 	defer cur.Close(ctx)
 
 	if err = cur.All(ctx, ret); err != nil {
-		logrus.Warnf("Find: unable to find data: e: %v", err)
 		return err
 	}
 

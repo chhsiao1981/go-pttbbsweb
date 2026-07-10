@@ -7,7 +7,6 @@ import (
 	"github.com/Ptt-official-app/pttbbs-backend/schema"
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 const GET_USER_INFO_R = "/user/:username"
@@ -129,8 +128,6 @@ func GetUserInfo(remoteAddr string, user *UserInfo, params interface{}, path int
 	updateNanoTS := types.NowNanoTS()
 
 	userDetail, statusCode, err := tryGetUserInfo(userID, thePath.Username, updateNanoTS, c)
-	logrus.Infof("GetUserInfo: after tryGetUserInfo: userID: %v Username: %v userDetail.UserID: %v", userID, thePath.Username, userDetail.UserID)
-
 	if err != nil {
 		return nil, statusCode, err
 	}
@@ -138,19 +135,16 @@ func GetUserInfo(remoteAddr string, user *UserInfo, params interface{}, path int
 	queryUserID := userDetail.UserID
 
 	userNewInfo, err := schema.GetUserNewInfo(queryUserID)
-	logrus.Infof("GetUserInfo: after GetUserNewInfo: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}
 
 	userIDEmail, err := schema.GetUserIDEmailByUserID(queryUserID, updateNanoTS)
-	logrus.Infof("GetUserInfo: after GetUserIDEmailByUserID: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}
 
 	userEmail, err := schema.GetUserEmailByUserID(queryUserID)
-	logrus.Infof("GetUserInfo: after GetUserEmailByUserID: userID: %v e: %v", queryUserID, err)
 	if err != nil {
 		return nil, 500, err
 	}

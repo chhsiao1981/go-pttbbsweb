@@ -333,7 +333,6 @@ func Init() (err error) {
 	keys = &bson.D{
 		{Key: USER_EMAIL_USER_ID_b, Value: 1},
 	}
-	logrus.Infof("schema.Init: user_email createIndex: keys: %v", keys)
 	err = UserEmail_c.CreateUniqueIndex(keys)
 	if err != nil {
 		return err
@@ -342,7 +341,6 @@ func Init() (err error) {
 	keys = &bson.D{
 		{Key: USER_EMAIL_EMAIL_b, Value: 1},
 	}
-	logrus.Infof("schema.Init: user_email CreateUniqueIndex: keys: %v", keys)
 	err = UserEmail_c.CreateUniqueIndex(keys)
 	if err != nil {
 		return err

@@ -10,7 +10,6 @@ import (
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/Ptt-official-app/pttbbs-backend/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func deserializeUserDetailAndUpdateDBGuest(updateNanoTS types.NanoTS) (userDetail *schema.UserDetail, err error) {
@@ -28,7 +27,6 @@ func deserializeUserDetailAndUpdateDB(user_b pttbbsapi.GetUserResult, updateNano
 	userDetail = schema.NewUserDetail(user_b, updateNanoTS)
 
 	err = schema.UpdateUserDetail(userDetail)
-	logrus.Infof("api.deserializeUserDetailAndUpdateDB: after UpdateUserDetail: userDetail: %v e: %v", userDetail, err)
 	if err != nil {
 		return nil, err
 	}

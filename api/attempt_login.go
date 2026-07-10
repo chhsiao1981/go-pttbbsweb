@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 const ATTEMPT_LOGIN_R = "/account/attemptlogin"
@@ -29,8 +28,6 @@ func AttemptLogin(remoteAddr string, user *UserInfo, params interface{}, c *gin.
 	if err != nil {
 		return &AttemptLoginResult{}, 200, nil
 	}
-
-	logrus.Infof("api.AttemptLogin: userID: %v username: %v email: %v", userID, username, email)
 
 	err = gen2FATokenAndSendEmail(userID, username, email, types.ATTEMPT_LOGIN_TITLE, types.ATTEMPT_LOGIN_TEMPLATE_CONTENT, types.EXPIRE_ATTEMPT_LOGIN_EMAIL_TS_DURATION)
 	if err != nil {

@@ -14,7 +14,6 @@ import (
 	"github.com/Ptt-official-app/pttbbs-backend/types"
 	"github.com/gin-gonic/gin"
 	"github.com/google/go-querystring/query"
-	"github.com/sirupsen/logrus"
 )
 
 // BackendPost
@@ -60,7 +59,6 @@ func BackendPost(c *gin.Context, url string, postData interface{}, headers map[s
 }
 
 func BackendGet(c *gin.Context, url string, params interface{}, headers map[string]string, result interface{}) (statusCode int, err error) {
-	logrus.Infof("BackendGet: start: url: %v params: %v isTest: %v", url, params, isTest)
 	if isTest {
 		return mockhttp.HTTPPost(url, params, result)
 	}

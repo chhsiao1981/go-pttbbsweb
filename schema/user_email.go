@@ -4,7 +4,6 @@ import (
 	"github.com/Ptt-official-app/go-pttbbs/bbs"
 	"github.com/Ptt-official-app/pttbbs-backend/db"
 	"github.com/Ptt-official-app/pttbbs-backend/types"
-	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -75,7 +74,6 @@ func CreateUserEmail(userID bbs.UUserID, email string, isDefault bool, updateNan
 	}
 
 	ret, err := UserEmail_c.CreateOnly(query, userEmail)
-	logrus.Infof("schema.CreateUserEmail: after CreateOnly: userID: %v email: %v userEmail: %v ret: %v e: %v", userID, email, userEmail, ret, err)
 	if err != nil {
 		return err
 	}
