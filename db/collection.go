@@ -417,7 +417,7 @@ func (c *Collection) BulkUpdate(theList []*UpdatePair) (r *mongo.BulkWriteResult
 //	query := make(map[string]interface{})
 //	query["test"] = 1
 //
-//	var ret []*Temp //!!! declare but initiate
+//	var ret []*Temp //!!! declare but not initiate
 //
 //	Find(query, 4, &ret, &Temp{})
 func (c *Collection) Find(filter interface{}, limit int64, ret interface{}, project interface{}, sort interface{}) (err error) {
@@ -557,7 +557,7 @@ func (c *Collection) Drop() (err error) {
 		}
 	}()
 
-	err = c.coll.Drop(ctx)
+	_, err = c.coll.DeleteMany(ctx, bson.M{})
 	if err != nil {
 		return err
 	}
