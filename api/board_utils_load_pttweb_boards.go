@@ -21,19 +21,46 @@ import (
 
 func TryLoadPttWebPopularBoards(c *gin.Context) (boards []*schema.BoardSummary, err error) {
 	updateNanoTS := types.NowNanoTS()
-	popularBoards, err := tryLoadPttWebPopularBoardsCore(c, updateNanoTS)
-	if err != nil {
-		return nil, err
+
+	// XXX silent err
+	popularBoards, _ := tryLoadPttWebPopularBoardsCore(c, updateNanoTS)
+	if popularBoards == nil {
+		popularBoards = []*schema.BoardSummary{}
 	}
 
-	whiteListBoards, err := tryLoadPttWebWhiteListBoards(c, updateNanoTS)
-	if err != nil {
-		return nil, err
+	popularBoardMap := make(map[bbs.BBoardID]bool)
+	for _, eachBoard := range popularBoards {
+		popularBoardMap[eachBoard.BBoardID] = true
 	}
 
-	boards = append(popularBoards, whiteListBoards...)
+	// XXX silent err
+	whiteListBoards, _ := tryLoadPttWebWhiteListBoards(c, updateNanoTS)
+	if whiteListBoards == nil {
+		whiteListBoards = []*schema.BoardSummary{}
+	}
 
+	// dedupedListBoards
+	dedupedListBoards := make([]*schema.BoardSummary, 0, len(whiteListBoards))
+	for _, eachBoard := range whiteListBoards {
+		_, ok := popularBoardMap[eachBoard.BBoardID]
+		if ok {
+			continue
+		}
+
+		dedupedListBoards = append(dedupedListBoards, eachBoard)
+		popularBoardMap[eachBoard.BBoardID] = true
+	}
+
+	boards = append(popularBoards, dedupedListBoards...)
+
+	// XXX silent err
 	_ = schema.ResetBoardIsPopular()
+
+	// early return if no boards
+	if len(boards) == 0 {
+		return boards, nil
+	}
+
 	err = schema.UpdateBoardSummaries(boards, updateNanoTS)
 	if err != nil {
 		return nil, err
